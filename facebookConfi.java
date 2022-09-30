@@ -1,23 +1,26 @@
-/*
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Test;
 
 public class facebookConfi {
 
     static WebDriver driver ;
+/*ConfigName cn = new ConfigName();*/
 
 
     public static void main(String[] args) {
         System.setProperty("webdriver.chrome.driver", System.getProperty("user.dir") + "//src//test//java//drivers//chromedriver");
 
         driver =  new ChromeDriver();
-        String name="atulcool55@gmail.com";
-        String pass="Vajpayee";
+        String name= ConfigName.getProperty("name");
+        String pass= ConfigName.getProperty("pass");
 
 
-
-        driver.get("https://www.facebook.com/");
+/*
+        driver.get(ConfigName.getProperty("url"));
         driver.findElement(By.name("email")).sendKeys("atulcool55@gmail.com");
         driver.findElement(By.name("pass")).sendKeys("");
         driver.findElement(By.name("login")).click();
@@ -26,10 +29,11 @@ public class facebookConfi {
         fb.invalidLoginWithPass(name,pass);
         fb.invaliudLoginWithUserName();
         fb.loginWithValidData(name,pass);
-        fb.validateErrorInBlankCase(name,pass);
+        fb.validateErrorInBlankCase(name,pass);*/
 
     }
 
+    @Test
     public void invaliudLoginWithUserName(){
 
         driver.findElement(By.name("email")).sendKeys("atulcool55@gmail.com");
@@ -37,75 +41,45 @@ public class facebookConfi {
         driver.findElement(By.name("login")).click();
 
     }
+    @Test
+    public void invalidLoginWithPass(){
 
-    public void invalidLoginWithPass(String name, String pass){
-
-        driver.findElement(By.name("email")).sendKeys(name);
-        driver.findElement(By.name("pass")).sendKeys(pass);
+        driver.findElement(By.name("email")).sendKeys("");
+        driver.findElement(By.name("pass")).sendKeys("Vajpayee");
         driver.findElement(By.name("login")).click();
 
     }
 
-    public void loginWithValidData(String name, String pass){
+    @Test
+    public void loginWithValidData(){
 
-        driver.findElement(By.name("email")).sendKeys(name);
-        driver.findElement(By.name("pass")).sendKeys(pass);
+        driver.findElement(By.name("email")).sendKeys("atulcool55@gmail.com");
+        driver.findElement(By.name("pass")).sendKeys("Vajpayee");
         driver.findElement(By.name("login")).click();
 
     }
 
-    public void validateErrorInBlankCase(String name, String pass){
+    @Test
+    public void validateErrorInBlankCase(){
 
-        driver.findElement(By.name("email")).sendKeys(name);
-        driver.findElement(By.name("pass")).sendKeys(pass);
+        driver.findElement(By.name("email")).sendKeys("");
+        driver.findElement(By.name("pass")).sendKeys("");
         driver.findElement(By.name("login")).click();
 
     }
-    public void loginpage()
+
+    @BeforeMethod
+    public void BfrMethodTest()
     {
+        System.setProperty("webdriver.chrome.driver", System.getProperty("user.dir") + "//src//test//java//drivers//chromedriver");
+        driver = new ChromeDriver();
         driver.get("https://www.facebook.com/");
     }
-
+    @AfterMethod
+    public void AfterMethodTest(){
+        driver.quit();
+    }
 }
 
 
-public class ConfigManager {
 
-    static Properties prop = new Properties();
-    static FileInputStream fis = null;
-
-    public static String getProperty(String s) {
-
-        String str = "";
-        File file = new File(System.getProperty("user.dir") + "//Config.properties");
-
-        try {
-            fis = new FileInputStream(file);
-            if (fis != null) {
-                try {
-                    prop.load(fis);
-                    str = prop.get(s).toString();
-                    if (str == " ")
-                        throw new SkipException("keys value" + s + "not present in config file");
-                } catch (IOException e) {
-                    ExtentInstance.addFail(e);
-                }
-            }
-
-        } catch (FileNotFoundException e) {
-
-            ExtentInstance.addInfo(e);
-        } finally {
-            if (fis != null) {
-                try {
-                    fis.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-
-        return str;
-    }
-
-}*/
